@@ -1,0 +1,41 @@
+.menu{
+    width:30%;
+    height:auto;
+}
+.menu ul{
+    width:180px;
+    margin:0;
+    padding:0;
+    list-style-type:none;   
+}
+.menu li{
+    position: relative;
+}
+.menu li ul{
+    position:absolute;
+    list-style-type:none;
+    left:179px;
+    width:180px;
+    display:none;
+    top:0;    
+}
+.menu li a{
+    height:30px;
+    display: block;
+    text-decoration: none;
+    background-color: #d36438;
+    color:#FFF;
+    font:500 15px Verdana;
+    padding:5px;
+    border:1px solid #FFF;
+    border-bottom:0; 
+    text-align: center;
+    line-height: 30px;
+}
+.menu li a:hover{
+    background-color:#c9f357;
+    color:#000;
+}
+.menu li:hover ul{
+    display:block;
+}
