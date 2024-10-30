@@ -1,0 +1,44 @@
+<students>
+    <student>
+        <name>
+            Melih Artar
+        </name>
+        <department>
+            Bilgisayar Mühendisliği
+        </department>
+        <number>
+            21060688
+        </number>
+        <class>
+            4.Sınıf
+        </class>
+    </student>
+    <student>
+        <name>
+            Doğukan Ceylan
+        </name>
+        <department>
+            İnşaat Mühendisliği
+        </department>
+        <number>
+            21060468
+        </number>
+        <class>
+            2.Sınıf
+        </class>
+    </student>
+    <student>
+        <name>
+            Hüseyin Aşan
+        </name>
+        <department>
+            Endüstri Mühendisliği
+        </department>
+        <number>
+            20040846
+        </number>
+        <class>
+            3.Sınıf
+        </class>
+    </student>
+</students>
