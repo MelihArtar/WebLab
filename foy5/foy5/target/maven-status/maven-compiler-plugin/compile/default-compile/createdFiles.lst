@@ -1,0 +1,6 @@
+com\foy\foy5\repostory\CarRepository.class
+com\foy\foy5\Foy5Application.class
+com\foy\foy5\controller\OperationController.class
+com\foy\foy5\service\CarService.class
+com\foy\foy5\controller\CarController.class
+com\foy\foy5\model\Car.class

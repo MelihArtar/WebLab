@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Veritabanı Yönetimi</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        header {
+            background-color: #f4f4f4;
+            padding: 10px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: row;
+            height: calc(100vh - 50px);
+        }
+
+        .table-container {
+            width: 60%;
+            overflow-y: auto;
+            padding: 20px;
+            border-right: 1px solid #ccc;
+        }
+
+        .table-container table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table-container th,
+        .table-container td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .table-container th {
+            background-color: #f0f0f0;
+        }
+
+        .form-container {
+            width: 40%;
+            padding: 20px;
+        }
+
+        .form-container .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-container label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-container input,
+        .form-container button {
+            width: 90%;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        .form-container button {
+            width: 20%;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .form-container button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <header>Veritabanı Yönetim Paneli</header>
+    <div class="container">
+
+        <div class="table-container">
+            <table class="table" id="data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>İsim</th>
+                        <th>Renk</th>
+                        <th>Model</th>
+                        <th>Plaka</th>
+                        <th>İşlemler</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="car : ${CarList}">
+                        <td th:text="${car.carId}"></td>
+                        <td th:text="${car.carName}"></td>
+                        <td th:text="${car.carColor}"></td>
+                        <td th:text="${car.carModel}"></td>
+                        <td th:text="${car.carNumberPlate}"></td>
+                        <td>
+                            <button class="btn btn-warning btn-sm"
+                                th:attr="data-id=${car.carId}, data-name=${car.carName}, data-color=${car.carColor}, data-plate=${car.carNumberPlate}, data-model=${car.carModel}"
+                                onclick="formDuzenleme(this)">
+                                Düzenle
+                            </button>
+                            <button><a th:href="@{/delCar/{id} (id=${car.carId})}" style="text-decoration: none;color: inherit;">Sil</a></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <form class="form-container" id="carForm">
+            <h2>Yeni Kayıt Ekle / Düzenle</h2>
+            <div class="form-group">
+                <label for="carName">İsim:</label>
+                <input type="text" id="carName" name="carName" placeholder="Araba adı giriniz">
+            </div>
+            <div class="form-group">
+                <label for="carColor">Renk:</label>
+                <input type="text" id="carColor" name="carColor" placeholder="Araba rengini giriniz">
+            </div>
+            <div class="form-group">
+                <label for="carModel">Model:</label>
+                <input type="text" id="carModel" name="carModel" placeholder="Araba modelini giriniz">
+            </div>
+            <div class="form-group">
+                <label for="carNumberPlate">Plaka:</label>
+                <input type="text" id="carNumberPlate" name="carNumberPlate" placeholder="Araba plakasını giriniz">
+            </div>
+            <button type="submit">Ekle</button>
+            <button type="button" id="editButton" style="margin-top: 20px;" onclick="updateData()">Düzenle</button>
+        </form>
+    </div>
+
+    <script>
+        let carId = null;
+    
+        function formDuzenleme(button) {
+
+            carId = button.getAttribute("data-id");
+            const carName = button.getAttribute("data-name");
+            const carColor = button.getAttribute("data-color");
+            const carModel = button.getAttribute("data-model");
+            const carNumberPlate = button.getAttribute("data-plate");
+    
+            document.getElementById("carName").value = carName;
+            document.getElementById("carColor").value = carColor;
+            document.getElementById("carModel").value = carModel;
+            document.getElementById("carNumberPlate").value = carNumberPlate;
+        }
+    
+        function updateData() {
+            const form = document.getElementById("carForm");
+            const updatedCar = {
+                carId: carId,
+                carName: document.getElementById("carName").value,
+                carColor: document.getElementById("carColor").value,
+                carModel: document.getElementById("carModel").value,
+                carNumberPlate: document.getElementById("carNumberPlate").value
+            };
+    
+            fetch(`/update/${carId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(updatedCar)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log("Car updated:", data);
+                 window.location.reload();
+            })
+            .catch(error => {
+                window.location.reload();
+            });
+        }
+    
+        document.getElementById("carForm").addEventListener("submit", function (event) {
+            event.preventDefault();
+    
+            let newCar = {
+                carName: document.getElementById("carName").value,
+                carColor: document.getElementById("carColor").value,
+                carModel: document.getElementById("carModel").value,
+                carNumberPlate: document.getElementById("carNumberPlate").value
+            };
+    
+            fetch('/newCar', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(newCar)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log("Car saved:", data);
+                window.location.reload();
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
+        });
+    </script>
+    
+</body>
+
+</html>
